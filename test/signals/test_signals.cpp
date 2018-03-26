@@ -96,3 +96,72 @@ TEST_F(EventDispatcherTest, Publish)
    StringEvent str_evt = StringEvent("foo");
    mgpp::signals::publish(str_evt);
 }
+
+class Foo {
+   public:
+      void int_cb(const mgpp::signals::Event& event)
+      {
+         const IntEvent& int_evt = static_cast<const IntEvent&>(event);
+         EXPECT_EQ(int_evt.id(), int_evt.arg());
+      }
+
+      void string_cb(const mgpp::signals::Event& event)
+      {
+         const StringEvent& str_evt = static_cast<const StringEvent&>(event);
+         EXPECT_EQ("foo", str_evt.arg());
+      }
+};
+
+class EventMemberDispatcherTest: public ::testing::Test {
+   public:
+      EventMemberDispatcherTest() : foo_(), int_conn_(), string_conn_() {}
+
+   protected:
+      virtual void SetUp() {
+         int_conn_ = mgpp::signals::subscribe(INT_EVENT, &Foo::int_cb, foo_);
+         string_conn_ = mgpp::signals::subscribe(STRING_EVENT, &Foo::string_cb, foo_);
+      }
+
+      virtual void TearDown() {
+         mgpp::signals::unsubscribe_all();
+      }
+
+      Foo foo_;
+      mgpp::signals::Connection int_conn_;
+      mgpp::signals::Connection string_conn_;
+};
+
+TEST_F(EventMemberDispatcherTest, Subscribe)
+{
+   EXPECT_EQ(1, mgpp::signals::num_slots(INT_EVENT));
+   EXPECT_EQ(1, mgpp::signals::num_slots(STRING_EVENT));
+}
+
+TEST_F(EventMemberDispatcherTest, Unsubscribe)
+{
+   mgpp::signals::unsubscribe(INT_EVENT, int_conn_);
+   EXPECT_EQ(0, mgpp::signals::num_slots(INT_EVENT));
+   EXPECT_EQ(1, mgpp::signals::num_slots(STRING_EVENT));
+}
+
+TEST_F(EventMemberDispatcherTest, UnsubscribeAll)
+{
+   mgpp::signals::unsubscribe_all();
+   EXPECT_EQ(0, mgpp::signals::num_slots(INT_EVENT));
+   EXPECT_EQ(0, mgpp::signals::num_slots(STRING_EVENT));
+}
+
+TEST_F(EventMemberDispatcherTest, UnsubscribeAllSignal)
+{
+   mgpp::signals::unsubscribe_all(INT_EVENT);
+   EXPECT_EQ(0, mgpp::signals::num_slots(INT_EVENT));
+   EXPECT_EQ(1, mgpp::signals::num_slots(STRING_EVENT));
+}
+
+TEST_F(EventMemberDispatcherTest, Publish)
+{
+   IntEvent int_evt = IntEvent(0);
+   mgpp::signals::publish(int_evt);
+   StringEvent str_evt = StringEvent("foo");
+   mgpp::signals::publish(str_evt);
+}

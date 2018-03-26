@@ -12,6 +12,7 @@ namespace signals {
 // Define callback templates and pointer types
 using EventCallbackTemplate = void (const Event&);
 using EventCallback = std::function<EventCallbackTemplate>;
+template <typename T> using EventMemberCallback = void (T::*)(const Event&);
 
 // Use boost signals2 signals/slots for the event dispatcher
 typedef boost::signals2::signal<EventCallbackTemplate> EventSignal;
@@ -19,6 +20,12 @@ typedef boost::signals2::connection Connection;
 
 // subscribe functions
 Connection subscribe(const int id, const EventCallback cb);
+
+template <typename T>
+Connection subscribe(const int id, const EventMemberCallback<T> mcb, T& obj)
+{
+   return subscribe(id, boost::bind(mcb, &obj, _1));
+}
 
 // unsubscribe functions
 void unsubscribe(const int id, const Connection& conn);
