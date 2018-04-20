@@ -29,15 +29,15 @@ class StringEvent: public mgpp::signals::Event {
       std::string arg_;
 };
 
-void int_cb(const mgpp::signals::Event& event)
+void int_cb(mgpp::signals::EventConstPtr event)
 {
-   const IntEvent& int_evt = static_cast<const IntEvent&>(event);
+   const IntEvent& int_evt = static_cast<const IntEvent&>(*event);
    EXPECT_EQ(int_evt.id(), int_evt.arg());
 }
 
-void string_cb(const mgpp::signals::Event& event)
+void string_cb(mgpp::signals::EventConstPtr event)
 {
-   const StringEvent& str_evt = static_cast<const StringEvent&>(event);
+   const StringEvent& str_evt = static_cast<const StringEvent&>(*event);
    EXPECT_EQ("foo", str_evt.arg());
 }
 
@@ -91,23 +91,23 @@ TEST_F(EventDispatcherTest, UnsubscribeAllSignal)
 
 TEST_F(EventDispatcherTest, Publish)
 {
-   IntEvent int_evt = IntEvent(0);
+   mgpp::signals::EventConstPtr int_evt(mgpp::signals::make_event<IntEvent>(0));
    mgpp::signals::publish(int_evt);
-   StringEvent str_evt = StringEvent("foo");
+   mgpp::signals::EventConstPtr str_evt(mgpp::signals::make_event<StringEvent>("foo"));
    mgpp::signals::publish(str_evt);
 }
 
 class Foo {
    public:
-      void int_cb(const mgpp::signals::Event& event)
+      void int_cb(mgpp::signals::EventConstPtr event)
       {
-         const IntEvent& int_evt = static_cast<const IntEvent&>(event);
+         const IntEvent& int_evt = static_cast<const IntEvent&>(*event);
          EXPECT_EQ(int_evt.id(), int_evt.arg());
       }
 
-      void string_cb(const mgpp::signals::Event& event)
+      void string_cb(mgpp::signals::EventConstPtr event)
       {
-         const StringEvent& str_evt = static_cast<const StringEvent&>(event);
+         const StringEvent& str_evt = static_cast<const StringEvent&>(*event);
          EXPECT_EQ("foo", str_evt.arg());
       }
 };
@@ -160,8 +160,8 @@ TEST_F(EventMemberDispatcherTest, UnsubscribeAllSignal)
 
 TEST_F(EventMemberDispatcherTest, Publish)
 {
-   IntEvent int_evt = IntEvent(0);
+   mgpp::signals::EventConstPtr int_evt(mgpp::signals::make_event<IntEvent>(0));
    mgpp::signals::publish(int_evt);
-   StringEvent str_evt = StringEvent("foo");
+   mgpp::signals::EventConstPtr str_evt(mgpp::signals::make_event<StringEvent>("foo"));
    mgpp::signals::publish(str_evt);
 }

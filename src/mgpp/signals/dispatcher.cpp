@@ -11,7 +11,7 @@ class Dispatcher {
       Connection subscribe(const int id, const EventCallback cb);
       void unsubscribe(const int id, const Connection& conn);
       void unsubscribe_all(const int id = -1);
-      void publish(const Event& event);
+      void publish(EventConstPtr event);
       int num_slots(const int id);
 
       static Dispatcher& instance()
@@ -65,10 +65,10 @@ void Dispatcher::unsubscribe_all(const int id)
    }
 }
 
-void Dispatcher::publish(const Event& event)
+void Dispatcher::publish(EventConstPtr event)
 {
-   if (signals_.count(event.id()) > 0) {
-      signals_[event.id()](event);
+   if (signals_.count(event->id()) > 0) {
+      signals_[event->id()](event);
    }
 }
 
@@ -101,7 +101,7 @@ void unsubscribe_all(const int id)
 }
 
 // publish function
-void publish(const Event& event)
+void publish(EventConstPtr event)
 {
    Dispatcher::instance().publish(event);
 }
