@@ -49,9 +49,9 @@ typedef boost::signals2::connection Connection;
 Connection subscribe(const int id, const EventCallback cb);
 
 template <typename T>
-Connection subscribe(const int id, const EventMemberCallback<T> mcb, const T& obj)
-{
-   return subscribe(id, boost::bind(mcb, const_cast<T*>(&obj), _1));
+Connection subscribe(const int id, const EventMemberCallback<T> mcb,
+                     const T& obj) {
+    return subscribe(id, boost::bind(mcb, const_cast<T*>(&obj), _1));
 }
 
 // unsubscribe functions
