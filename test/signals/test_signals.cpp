@@ -25,8 +25,10 @@
  */
 
 #include <gtest/gtest.h>
-#include <mgpp/signals.hpp>
+
 #include <string>
+
+#include <mgpp/signals.hpp>
 
 enum TestEvents {
    INT_EVENT,

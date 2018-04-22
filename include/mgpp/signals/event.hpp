@@ -24,8 +24,8 @@
  * SOFTWARE.
  */
 
-#ifndef __mgpp_signals_event_hpp__
-#define __mgpp_signals_event_hpp__
+#ifndef MGPP_SIGNALS_EVENT_HPP_
+#define MGPP_SIGNALS_EVENT_HPP_
 
 namespace mgpp {
 namespace signals {
@@ -56,4 +56,4 @@ std::shared_ptr<T> make_event(Args... args)
 }  // namespace signals
 }  // namespace mgpp
 
-#endif  // __mgpp_signals_event_hpp__
+#endif  // MGPP_SIGNALS_EVENT_HPP_

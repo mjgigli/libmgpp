@@ -24,10 +24,10 @@
  * SOFTWARE.
  */
 
-#ifndef __mgpp_signals_hpp__
-#define __mgpp_signals_hpp__
+#ifndef MGPP_SIGNALS_HPP_
+#define MGPP_SIGNALS_HPP_
 
 #include <mgpp/signals/dispatcher.hpp>
 #include <mgpp/signals/event.hpp>
 
-#endif  // __mgpp_signals_hpp__
+#endif  // MGPP_SIGNALS_HPP_

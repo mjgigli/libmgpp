@@ -24,11 +24,11 @@
  * SOFTWARE.
  */
 
-#ifndef __mgpp_signals_dispatcher_hpp__
-#define __mgpp_signals_dispatcher_hpp__
+#ifndef MGPP_SIGNALS_DISPATCHER_HPP_
+#define MGPP_SIGNALS_DISPATCHER_HPP_
 
-#include <unordered_map>
 #include <memory>
+#include <unordered_map>
 #include <boost/signals2.hpp>
 
 #include <mgpp/signals/event.hpp>
@@ -68,4 +68,4 @@ int num_slots(const int id);
 }  // namespace signals
 }  // namespace mgpp
 
-#endif  // __mgpp_signals_dispatcher_hpp__
+#endif  // MGPP_SIGNALS_DISPATCHER_HPP_

@@ -23,9 +23,9 @@
  * THE
  * SOFTWARE.
  */
-#ifndef __mgpp_hpp__
-#define __mgpp_hpp__
+#ifndef MGPP_HPP_
+#define MGPP_HPP_
 
 #include <mgpp/signals.hpp>
 
-#endif  // __mgpp_hpp__
+#endif  // MGPP_HPP_

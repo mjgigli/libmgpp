@@ -26,8 +26,6 @@
 
 #include <mgpp/signals/dispatcher.hpp>
 
-using namespace mgpp::signals;
-
 namespace mgpp {
 namespace signals {
 
