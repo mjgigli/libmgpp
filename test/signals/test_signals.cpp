@@ -57,12 +57,12 @@ class StringEvent: public mgpp::signals::Event {
     std::string arg_;
 };
 
-void int_cb(mgpp::signals::EventConstPtr event) {
+void IntCb(mgpp::signals::EventConstPtr event) {
     const IntEvent& int_evt = static_cast<const IntEvent&>(*event);
     EXPECT_EQ(int_evt.id(), int_evt.arg());
 }
 
-void string_cb(mgpp::signals::EventConstPtr event) {
+void StringCb(mgpp::signals::EventConstPtr event) {
     const StringEvent& str_evt = static_cast<const StringEvent&>(*event);
     EXPECT_EQ("foo", str_evt.arg());
 }
@@ -70,11 +70,11 @@ void string_cb(mgpp::signals::EventConstPtr event) {
 class EventDispatcherTest: public ::testing::Test {
  protected:
     virtual void SetUp() {
-        int_conn_ = mgpp::signals::subscribe(INT_EVENT, &int_cb);
-        string_conn_ = mgpp::signals::subscribe(STRING_EVENT, &string_cb);
+        int_conn_ = mgpp::signals::Subscribe(INT_EVENT, &IntCb);
+        string_conn_ = mgpp::signals::Subscribe(STRING_EVENT, &StringCb);
     }
     virtual void TearDown() {
-        mgpp::signals::unsubscribe_all();
+        mgpp::signals::UnsubscribeAll();
     }
 
     mgpp::signals::Connection int_conn_;
@@ -82,51 +82,51 @@ class EventDispatcherTest: public ::testing::Test {
 };
 
 TEST(EventDispatcher, Defaults) {
-    EXPECT_EQ(0, mgpp::signals::num_slots(INT_EVENT));
-    EXPECT_EQ(0, mgpp::signals::num_slots(STRING_EVENT));
-    EXPECT_EQ(0, mgpp::signals::num_slots(100));
+    EXPECT_EQ(0, mgpp::signals::NumSlots(INT_EVENT));
+    EXPECT_EQ(0, mgpp::signals::NumSlots(STRING_EVENT));
+    EXPECT_EQ(0, mgpp::signals::NumSlots(100));
 }
 
 TEST_F(EventDispatcherTest, Subscribe) {
-    EXPECT_EQ(1, mgpp::signals::num_slots(INT_EVENT));
-    EXPECT_EQ(1, mgpp::signals::num_slots(STRING_EVENT));
+    EXPECT_EQ(1, mgpp::signals::NumSlots(INT_EVENT));
+    EXPECT_EQ(1, mgpp::signals::NumSlots(STRING_EVENT));
 }
 
 TEST_F(EventDispatcherTest, Unsubscribe) {
-    mgpp::signals::unsubscribe(INT_EVENT, int_conn_);
-    EXPECT_EQ(0, mgpp::signals::num_slots(INT_EVENT));
-    EXPECT_EQ(1, mgpp::signals::num_slots(STRING_EVENT));
+    mgpp::signals::Unsubscribe(INT_EVENT, int_conn_);
+    EXPECT_EQ(0, mgpp::signals::NumSlots(INT_EVENT));
+    EXPECT_EQ(1, mgpp::signals::NumSlots(STRING_EVENT));
 }
 
 TEST_F(EventDispatcherTest, UnsubscribeAll) {
-    mgpp::signals::unsubscribe_all();
-    EXPECT_EQ(0, mgpp::signals::num_slots(INT_EVENT));
-    EXPECT_EQ(0, mgpp::signals::num_slots(STRING_EVENT));
+    mgpp::signals::UnsubscribeAll();
+    EXPECT_EQ(0, mgpp::signals::NumSlots(INT_EVENT));
+    EXPECT_EQ(0, mgpp::signals::NumSlots(STRING_EVENT));
 }
 
 TEST_F(EventDispatcherTest, UnsubscribeAllSignal) {
-    mgpp::signals::unsubscribe_all(INT_EVENT);
-    EXPECT_EQ(0, mgpp::signals::num_slots(INT_EVENT));
-    EXPECT_EQ(1, mgpp::signals::num_slots(STRING_EVENT));
+    mgpp::signals::UnsubscribeAll(INT_EVENT);
+    EXPECT_EQ(0, mgpp::signals::NumSlots(INT_EVENT));
+    EXPECT_EQ(1, mgpp::signals::NumSlots(STRING_EVENT));
 }
 
 TEST_F(EventDispatcherTest, Publish) {
     mgpp::signals::EventConstPtr int_evt(
-        mgpp::signals::make_event<IntEvent>(0));
-    mgpp::signals::publish(int_evt);
+        mgpp::signals::MakeEvent<IntEvent>(0));
+    mgpp::signals::Publish(int_evt);
     mgpp::signals::EventConstPtr str_evt(
-        mgpp::signals::make_event<StringEvent>("foo"));
-    mgpp::signals::publish(str_evt);
+        mgpp::signals::MakeEvent<StringEvent>("foo"));
+    mgpp::signals::Publish(str_evt);
 }
 
 class Foo {
  public:
-    void int_cb(mgpp::signals::EventConstPtr event) {
+    void IntCb(mgpp::signals::EventConstPtr event) {
         const IntEvent& int_evt = static_cast<const IntEvent&>(*event);
         EXPECT_EQ(int_evt.id(), int_evt.arg());
     }
 
-    void string_cb(mgpp::signals::EventConstPtr event) {
+    void StringCb(mgpp::signals::EventConstPtr event) {
         const StringEvent& str_evt = static_cast<const StringEvent&>(*event);
         EXPECT_EQ("foo", str_evt.arg());
     }
@@ -138,13 +138,13 @@ class EventMemberDispatcherTest: public ::testing::Test {
 
  protected:
     virtual void SetUp() {
-        int_conn_ = mgpp::signals::subscribe(INT_EVENT, &Foo::int_cb, foo_);
-        string_conn_ = mgpp::signals::subscribe(STRING_EVENT,
-                                                &Foo::string_cb, foo_);
+        int_conn_ = mgpp::signals::Subscribe(INT_EVENT, &Foo::IntCb, foo_);
+        string_conn_ = mgpp::signals::Subscribe(STRING_EVENT,
+                                                &Foo::StringCb, foo_);
     }
 
     virtual void TearDown() {
-        mgpp::signals::unsubscribe_all();
+        mgpp::signals::UnsubscribeAll();
     }
 
     Foo foo_;
@@ -153,33 +153,33 @@ class EventMemberDispatcherTest: public ::testing::Test {
 };
 
 TEST_F(EventMemberDispatcherTest, Subscribe) {
-    EXPECT_EQ(1, mgpp::signals::num_slots(INT_EVENT));
-    EXPECT_EQ(1, mgpp::signals::num_slots(STRING_EVENT));
+    EXPECT_EQ(1, mgpp::signals::NumSlots(INT_EVENT));
+    EXPECT_EQ(1, mgpp::signals::NumSlots(STRING_EVENT));
 }
 
 TEST_F(EventMemberDispatcherTest, Unsubscribe) {
-    mgpp::signals::unsubscribe(INT_EVENT, int_conn_);
-    EXPECT_EQ(0, mgpp::signals::num_slots(INT_EVENT));
-    EXPECT_EQ(1, mgpp::signals::num_slots(STRING_EVENT));
+    mgpp::signals::Unsubscribe(INT_EVENT, int_conn_);
+    EXPECT_EQ(0, mgpp::signals::NumSlots(INT_EVENT));
+    EXPECT_EQ(1, mgpp::signals::NumSlots(STRING_EVENT));
 }
 
 TEST_F(EventMemberDispatcherTest, UnsubscribeAll) {
-    mgpp::signals::unsubscribe_all();
-    EXPECT_EQ(0, mgpp::signals::num_slots(INT_EVENT));
-    EXPECT_EQ(0, mgpp::signals::num_slots(STRING_EVENT));
+    mgpp::signals::UnsubscribeAll();
+    EXPECT_EQ(0, mgpp::signals::NumSlots(INT_EVENT));
+    EXPECT_EQ(0, mgpp::signals::NumSlots(STRING_EVENT));
 }
 
 TEST_F(EventMemberDispatcherTest, UnsubscribeAllSignal) {
-    mgpp::signals::unsubscribe_all(INT_EVENT);
-    EXPECT_EQ(0, mgpp::signals::num_slots(INT_EVENT));
-    EXPECT_EQ(1, mgpp::signals::num_slots(STRING_EVENT));
+    mgpp::signals::UnsubscribeAll(INT_EVENT);
+    EXPECT_EQ(0, mgpp::signals::NumSlots(INT_EVENT));
+    EXPECT_EQ(1, mgpp::signals::NumSlots(STRING_EVENT));
 }
 
 TEST_F(EventMemberDispatcherTest, Publish) {
     mgpp::signals::EventConstPtr int_evt(
-        mgpp::signals::make_event<IntEvent>(0));
-    mgpp::signals::publish(int_evt);
+        mgpp::signals::MakeEvent<IntEvent>(0));
+    mgpp::signals::Publish(int_evt);
     mgpp::signals::EventConstPtr str_evt(
-        mgpp::signals::make_event<StringEvent>("foo"));
-    mgpp::signals::publish(str_evt);
+        mgpp::signals::MakeEvent<StringEvent>("foo"));
+    mgpp::signals::Publish(str_evt);
 }

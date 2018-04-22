@@ -32,13 +32,13 @@ namespace signals {
 // singleton dispatcher class
 class Dispatcher {
  public:
-    Connection subscribe(const int id, const EventCallback cb);
-    void unsubscribe(const int id, const Connection& conn);
-    void unsubscribe_all(const int id = -1);
-    void publish(EventConstPtr event);
-    int num_slots(const int id);
+    Connection Subscribe(const int id, const EventCallback cb);
+    void Unsubscribe(const int id, const Connection& conn);
+    void UnsubscribeAll(const int id = -1);
+    void Publish(EventConstPtr event);
+    int NumSlots(const int id);
 
-    static Dispatcher& instance() {
+    static Dispatcher& Instance() {
         static Dispatcher dispatcher;
         return dispatcher;
     }
@@ -55,12 +55,12 @@ class Dispatcher {
 Dispatcher::Dispatcher() : signals_() {}
 Dispatcher::~Dispatcher() {}
 
-Connection Dispatcher::subscribe(const int id, const EventCallback cb) {
+Connection Dispatcher::Subscribe(const int id, const EventCallback cb) {
     // Creates a new signal if `id` is not already in `signals_`
     return signals_[id].connect(cb);
 }
 
-void Dispatcher::unsubscribe(const int id, const Connection& conn) {
+void Dispatcher::Unsubscribe(const int id, const Connection& conn) {
     if (signals_.count(id) > 0) {
         conn.disconnect();
 
@@ -70,7 +70,7 @@ void Dispatcher::unsubscribe(const int id, const Connection& conn) {
     }
 }
 
-void Dispatcher::unsubscribe_all(const int id) {
+void Dispatcher::UnsubscribeAll(const int id) {
     if (id == -1) {
         for (auto it = signals_.begin(); it != signals_.end(); ++it) {
             it->second.disconnect_all_slots();
@@ -84,13 +84,13 @@ void Dispatcher::unsubscribe_all(const int id) {
     }
 }
 
-void Dispatcher::publish(EventConstPtr event) {
+void Dispatcher::Publish(EventConstPtr event) {
     if (signals_.count(event->id()) > 0) {
         signals_[event->id()](event);
     }
 }
 
-int Dispatcher::num_slots(const int id) {
+int Dispatcher::NumSlots(const int id) {
     if (signals_.count(id) > 0) {
         return signals_[id].num_slots();
     } else {
@@ -98,28 +98,28 @@ int Dispatcher::num_slots(const int id) {
     }
 }
 
-// subscribe functions
-Connection subscribe(const int id, const EventCallback cb) {
-    return Dispatcher::instance().subscribe(id, cb);
+// Subscribe functions
+Connection Subscribe(const int id, const EventCallback cb) {
+    return Dispatcher::Instance().Subscribe(id, cb);
 }
 
-// unsubscribe functions
-void unsubscribe(const int id, const Connection& conn) {
-    Dispatcher::instance().unsubscribe(id, conn);
+// Unsubscribe functions
+void Unsubscribe(const int id, const Connection& conn) {
+    Dispatcher::Instance().Unsubscribe(id, conn);
 }
 
-// unsubscribe_all function
-void unsubscribe_all(const int id) {
-    Dispatcher::instance().unsubscribe_all(id);
+// UnsubscribeAll function
+void UnsubscribeAll(const int id) {
+    Dispatcher::Instance().UnsubscribeAll(id);
 }
 
-// publish function
-void publish(EventConstPtr event) {
-    Dispatcher::instance().publish(event);
+// Publish function
+void Publish(EventConstPtr event) {
+    Dispatcher::Instance().Publish(event);
 }
 
-int num_slots(const int id) {
-    return Dispatcher::instance().num_slots(id);
+int NumSlots(const int id) {
+    return Dispatcher::Instance().NumSlots(id);
 }
 
 }   // namespace signals

@@ -45,25 +45,25 @@ template <typename T> using EventMemberCallback = void (T::*)(EventConstPtr);
 typedef boost::signals2::signal<EventCallbackTemplate> EventSignal;
 typedef boost::signals2::connection Connection;
 
-// subscribe functions
-Connection subscribe(const int id, const EventCallback cb);
+// Subscribe functions
+Connection Subscribe(const int id, const EventCallback cb);
 
 template <typename T>
-Connection subscribe(const int id, const EventMemberCallback<T> mcb,
+Connection Subscribe(const int id, const EventMemberCallback<T> mcb,
                      const T& obj) {
-    return subscribe(id, boost::bind(mcb, const_cast<T*>(&obj), _1));
+    return Subscribe(id, boost::bind(mcb, const_cast<T*>(&obj), _1));
 }
 
-// unsubscribe functions
-void unsubscribe(const int id, const Connection& conn);
+// Unsubscribe functions
+void Unsubscribe(const int id, const Connection& conn);
 
-// unsubscribe_all function
-void unsubscribe_all(const int id = -1);
+// UnsubscribeAll function
+void UnsubscribeAll(const int id = -1);
 
-// publish function
-void publish(EventConstPtr event);
+// Publish function
+void Publish(EventConstPtr event);
 
-int num_slots(const int id);
+int NumSlots(const int id);
 
 }  // namespace signals
 }  // namespace mgpp

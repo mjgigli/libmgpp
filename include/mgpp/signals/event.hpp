@@ -47,7 +47,7 @@ using EventPtr = std::shared_ptr<Event>;
 using EventConstPtr = std::shared_ptr<const Event>;
 
 template <typename T, typename... Args>
-std::shared_ptr<T> make_event(Args... args) {
+std::shared_ptr<T> MakeEvent(Args... args) {
     return std::make_shared<T>(args...);
 }
 
