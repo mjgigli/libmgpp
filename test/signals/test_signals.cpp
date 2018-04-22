@@ -37,7 +37,7 @@ enum TestEvents {
 
 class IntEvent: public mgpp::signals::Event {
    public:
-      IntEvent(int arg) :
+      explicit IntEvent(int arg) :
          mgpp::signals::Event(INT_EVENT),
          arg_(arg) {}
       int arg() const { return arg_; }
@@ -48,7 +48,7 @@ class IntEvent: public mgpp::signals::Event {
 
 class StringEvent: public mgpp::signals::Event {
    public:
-      StringEvent(std::string arg) :
+      explicit StringEvent(std::string arg) :
          mgpp::signals::Event(STRING_EVENT),
          arg_(arg) {}
       const std::string& arg() const { return arg_; }

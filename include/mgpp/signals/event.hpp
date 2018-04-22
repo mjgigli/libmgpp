@@ -32,7 +32,7 @@ namespace signals {
 
 class Event {
    public:
-      Event(int id) : id_(id) {}
+      explicit Event(int id) : id_(id) {}
       virtual ~Event() {}
 
       int id() const
