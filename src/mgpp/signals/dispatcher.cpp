@@ -80,8 +80,7 @@ void Dispatcher::unsubscribe_all(const int id)
          it->second.disconnect_all_slots();
       }
       signals_.clear();
-   }
-   else {
+   } else {
       if (signals_.count(id) > 0) {
          signals_[id].disconnect_all_slots();
          signals_.erase(id);
@@ -100,8 +99,7 @@ int Dispatcher::num_slots(const int id)
 {
    if (signals_.count(id) > 0) {
       return signals_[id].num_slots();
-   }
-   else {
+   } else {
       return 0;
    }
 }
