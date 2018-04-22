@@ -1,8 +1,34 @@
-#ifndef __mgpp_signals_dispatcher_hpp__
-#define __mgpp_signals_dispatcher_hpp__
+/*
+ * Copyright (c) 2018 Matt Gigli
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE
+ * SOFTWARE.
+ */
 
-#include <unordered_map>
+#ifndef MGPP_SIGNALS_DISPATCHER_HPP_
+#define MGPP_SIGNALS_DISPATCHER_HPP_
+
 #include <memory>
+#include <unordered_map>
 #include <boost/signals2.hpp>
 
 #include <mgpp/signals/event.hpp>
@@ -19,27 +45,27 @@ template <typename T> using EventMemberCallback = void (T::*)(EventConstPtr);
 typedef boost::signals2::signal<EventCallbackTemplate> EventSignal;
 typedef boost::signals2::connection Connection;
 
-// subscribe functions
-Connection subscribe(const int id, const EventCallback cb);
+// Subscribe functions
+Connection Subscribe(const int id, const EventCallback cb);
 
 template <typename T>
-Connection subscribe(const int id, const EventMemberCallback<T> mcb, T& obj)
-{
-   return subscribe(id, boost::bind(mcb, &obj, _1));
+Connection Subscribe(const int id, const EventMemberCallback<T> mcb,
+                     const T& obj) {
+    return Subscribe(id, boost::bind(mcb, const_cast<T*>(&obj), _1));
 }
 
-// unsubscribe functions
-void unsubscribe(const int id, const Connection& conn);
+// Unsubscribe functions
+void Unsubscribe(const int id, const Connection& conn);
 
-// unsubscribe_all function
-void unsubscribe_all(const int id = -1);
+// UnsubscribeAll function
+void UnsubscribeAll(const int id = -1);
 
-// publish function
-void publish(EventConstPtr event);
+// Publish function
+void Publish(EventConstPtr event);
 
-int num_slots(const int id);
+int NumSlots(const int id);
 
 }  // namespace signals
 }  // namespace mgpp
 
-#endif  // __mgpp_signals_dispatcher_hpp__
+#endif  // MGPP_SIGNALS_DISPATCHER_HPP_
