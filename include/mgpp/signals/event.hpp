@@ -27,6 +27,8 @@
 #ifndef MGPP_SIGNALS_EVENT_HPP_
 #define MGPP_SIGNALS_EVENT_HPP_
 
+#include <memory>
+
 namespace mgpp {
 namespace signals {
 
