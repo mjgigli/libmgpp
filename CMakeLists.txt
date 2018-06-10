@@ -10,6 +10,11 @@ add_library(mgpp
     src/mgpp/signals/dispatcher.cpp
     )
 
+add_library(ao
+    STATIC
+    src/mgpp/ao/hsm.cpp
+    )
+
 add_custom_target(
     lint ALL
     COMMAND cpplint
