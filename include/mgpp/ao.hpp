@@ -27,7 +27,7 @@
 #ifndef MGPP_AO_HPP_
 #define MGPP_AO_HPP_
 
-#include <mgpp/ao/hsm.hpp>
 #include <mgpp/ao/event.hpp>
+#include <mgpp/ao/hsm.hpp>
 
 #endif  // MGPP_AO_HPP_

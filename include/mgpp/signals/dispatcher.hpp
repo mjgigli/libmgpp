@@ -29,17 +29,18 @@
 
 #include <memory>
 #include <unordered_map>
-#include <boost/signals2.hpp>
 
+#include <boost/signals2.hpp>
 #include <mgpp/signals/event.hpp>
 
 namespace mgpp {
 namespace signals {
 
 // Define callback templates and pointer types
-using EventCallbackTemplate = void (EventConstPtr);
+using EventCallbackTemplate = void(EventConstPtr);
 using EventCallback = std::function<EventCallbackTemplate>;
-template <typename T> using EventMemberCallback = void (T::*)(EventConstPtr);
+template <typename T>
+using EventMemberCallback = void (T::*)(EventConstPtr);
 
 // Use boost signals2 signals/slots for the event dispatcher
 typedef boost::signals2::signal<EventCallbackTemplate> EventSignal;
@@ -50,12 +51,12 @@ Connection Subscribe(const int id, const EventCallback cb);
 
 template <typename T>
 Connection Subscribe(const int id, const EventMemberCallback<T> mcb,
-                     const T& obj) {
-    return Subscribe(id, boost::bind(mcb, const_cast<T*>(&obj), _1));
+                     const T &obj) {
+  return Subscribe(id, boost::bind(mcb, const_cast<T *>(&obj), _1));
 }
 
 // Unsubscribe functions
-void Unsubscribe(const int id, const Connection& conn);
+void Unsubscribe(const int id, const Connection &conn);
 
 // UnsubscribeAll function
 void UnsubscribeAll(const int id = -1);

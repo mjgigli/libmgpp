@@ -31,13 +31,14 @@ namespace mgpp {
 
 class Noncopyable {
  protected:
-    Noncopyable() {}
-    ~Noncopyable() {}
+  Noncopyable() {}
+  ~Noncopyable() {}
+
  private:
-    Noncopyable(const Noncopyable&) = delete;
-    const Noncopyable& operator=(const Noncopyable&) = delete;
+  Noncopyable(const Noncopyable &) = delete;
+  const Noncopyable &operator=(const Noncopyable &) = delete;
 };
 
-}   // namespace mgpp
+}  // namespace mgpp
 
 #endif  // MGPP_NONCOPYABLE_HPP_

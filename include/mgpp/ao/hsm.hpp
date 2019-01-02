@@ -36,19 +36,19 @@ namespace mgpp {
 namespace ao {
 
 enum HsmSignal {
-    SUPER_SIG,
-    ENTRY_SIG,
-    EXIT_SIG,
-    INIT_SIG,
-    USER_SIG   // start user signals from this value
+  SUPER_SIG,
+  ENTRY_SIG,
+  EXIT_SIG,
+  INIT_SIG,
+  USER_SIG  // start user signals from this value
 };
 
 enum StateAction {
-    ACTION_SUPER,
-    ACTION_IGNORED,
-    ACTION_HANDLED,
-    ACTION_INITIAL_TRANSITION,
-    ACTION_TRANSITION
+  ACTION_SUPER,
+  ACTION_IGNORED,
+  ACTION_HANDLED,
+  ACTION_INITIAL_TRANSITION,
+  ACTION_TRANSITION
 };
 
 // Forward declarations
@@ -56,71 +56,70 @@ class Hsm;
 
 // using StateHandler =
 // std::function<StateAction (Hsm * const me, EventConstPtr)>;
-typedef StateAction (*StateHandler) (void * const me, EventConstPtr evt);
+typedef StateAction (*StateHandler)(void *const me, EventConstPtr evt);
 
 // Helper functions
 template <class T>
 StateHandler StateCast(T handler) {
-    return reinterpret_cast<StateHandler>(handler);
+  return reinterpret_cast<StateHandler>(handler);
 }
 
-class Hsm: private Noncopyable {
+class Hsm : private Noncopyable {
  public:
-    virtual ~Hsm();
+  virtual ~Hsm();
 
-    virtual void Init();
-    virtual void Dispatch(EventConstPtr evt);
+  virtual void Init();
+  virtual void Dispatch(EventConstPtr evt);
 
-    StateHandler state() const;
+  StateHandler state() const;
 
  protected:
-    explicit Hsm(StateHandler initial);
+  explicit Hsm(StateHandler initial);
 
-    template <class T>
-    StateAction InitialTransition(T target);
+  template <class T>
+  StateAction InitialTransition(T target);
 
-    template <class T>
-    StateAction Transition(T target);
+  template <class T>
+  StateAction Transition(T target);
 
-    template <class T>
-    StateAction Super(T state);
+  template <class T>
+  StateAction Super(T state);
 
-    StateAction Handled();
+  StateAction Handled();
 
-    static StateAction Top(Hsm * const me, EventConstPtr evt);
+  static StateAction Top(Hsm *const me, EventConstPtr evt);
 
  private:
-    StateHandler state_;
-    StateHandler temp_;
-    EventConstPtr super_evt_;
-    EventConstPtr init_evt_;
-    EventConstPtr entry_evt_;
-    EventConstPtr exit_evt_;
+  StateHandler state_;
+  StateHandler temp_;
+  EventConstPtr super_evt_;
+  EventConstPtr init_evt_;
+  EventConstPtr entry_evt_;
+  EventConstPtr exit_evt_;
 
-    void EnterState(StateHandler state);
-    void ExitState();
-    StateAction InitialTransition(StateHandler target);
-    StateAction Transition(StateHandler target);
-    StateAction Super(StateHandler state);
+  void EnterState(StateHandler state);
+  void ExitState();
+  StateAction InitialTransition(StateHandler target);
+  StateAction Transition(StateHandler target);
+  StateAction Super(StateHandler state);
 };
 
 template <class T>
 StateAction Hsm::InitialTransition(T target) {
-    return this->InitialTransition(StateCast(target));
+  return this->InitialTransition(StateCast(target));
 }
 
 template <class T>
 StateAction Hsm::Transition(T target) {
-    return this->Transition(StateCast(target));
+  return this->Transition(StateCast(target));
 }
 
 template <class T>
 StateAction Hsm::Super(T state) {
-    return this->Super(StateCast(state));
+  return this->Super(StateCast(state));
 }
 
-}   // namespace ao
-}   // namespace mgpp
-
+}  // namespace ao
+}  // namespace mgpp
 
 #endif  // MGPP_AO_HSM_HPP_

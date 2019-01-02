@@ -39,10 +39,10 @@ using EventConstPtr = mgpp::signals::EventConstPtr;
 
 template <typename T, typename... Args>
 std::shared_ptr<T> MakeEvent(Args... args) {
-    return mgpp::signals::MakeEvent<T>(args...);
+  return mgpp::signals::MakeEvent<T>(args...);
 }
 
-}   // namespace ao
-}   // namespace mgpp
+}  // namespace ao
+}  // namespace mgpp
 
 #endif  // MGPP_AO_EVENT_HPP_

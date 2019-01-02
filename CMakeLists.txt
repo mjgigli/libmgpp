@@ -28,3 +28,6 @@ add_custom_target(
 
 enable_testing()
 add_subdirectory(test)
+
+# Pull in clang-tidy checks
+include(cmake/clang-dev-tools.cmake)
